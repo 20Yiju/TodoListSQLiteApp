@@ -13,12 +13,17 @@ public class TodoUtil {
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.println("ADD item You want!!\n"
-				+ "Write the category of item to ADD > ");
-		cate = sc.next();
-		sc.nextLine();
-		System.out.println("Write the title of item to ADD > ");
-		
+				+ "Write the title of item to ADD > ");
 		title = sc.next();
+		
+		if(list.isDuplicate(title)) {
+			System.out.println("Title can not be duplicate!!");
+		}
+		
+		sc.nextLine();
+		System.out.println("Write the category of item to ADD > ");
+		
+		cate = sc.next();
 		sc.nextLine();
 		System.out.println("Write the due date of item to ADD > ");
 		due_date = sc.next().trim();
@@ -192,6 +197,22 @@ public class TodoUtil {
 			c++;
 		}
 		System.out.printf("\n%d items are founded:D\n", c);	
+	}
+	
+	public static void findCateList(TodoList l, String cate) {
+		int c = 0;
+		for (String item : l.getListCategories(cate)) {
+			System.out.println(item.toString());
+			c++;
+		}
+		System.out.printf("\n%d items are founded:D\n", c);	
+	}
+	
+	public static void listAll(TodoList l, String orderby, int ordering) {
+		System.out.printf("\n%d items are exist:D", l.getCount());
+		for (TodoItem item : l.getOrderedList(orderby, ordering)) {
+			System.out.println(item.toString());
+		}
 	}
 	
 

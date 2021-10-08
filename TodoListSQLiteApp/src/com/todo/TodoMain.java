@@ -45,7 +45,8 @@ public class TodoMain {
 				break;
 			
 			case "find_cate":
-				TodoUtil.listCateAll(l);
+				String cate = sc.nextLine().trim();
+				TodoUtil.findCateList(l, cate);
 				break;
 				
 			case "ls_cate":
@@ -53,29 +54,23 @@ public class TodoMain {
 				break;
 
 			case "ls_name_asc":
-				l.sortByName();
 		        System.out.println("This list is arranged in order of titles.");
-				isList = true;
+				TodoUtil.listAll(l, "title", 1);
 				break;
 
 			case "ls_name_desc":
-				l.sortByName();
-				l.reverseList();
 				System.out.println("This list is arranged in reverse order of titles.");
-				isList = true;
+				TodoUtil.listAll(l, "title", 0);
 				break;
 				
 			case "ls_date":
-				l.sortByDate();
 				System.out.println("This list is arranged by date.");
-				isList = true;
+				TodoUtil.listAll(l, "title", 1);
 				break;
 				
 			case "ls_date_desc":
-				l.sortByDate();
-				l.reverseList();
 				System.out.println("This list is arranged in reverse order of date.");
-				isList = true;
+				TodoUtil.listAll(l, "title", 0);
 				break;
 	
 			case "help" :

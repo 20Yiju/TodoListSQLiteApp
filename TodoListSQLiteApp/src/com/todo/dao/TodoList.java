@@ -16,7 +16,7 @@ import com.todo.service.TodoSortByName;
 public class TodoList {
 	private Connection conn;
 	
-	//private List<TodoItem> list;
+	private List<TodoItem> list;
 
 	public TodoList() {
 		this.conn = DbConnect.getConnection();
@@ -67,12 +67,7 @@ public class TodoList {
 		return list.indexOf(t);
 	}
 
-	public Boolean isDuplicate(String title) {
-		for (TodoItem item : list) {
-			if (title.equals(item.getTitle())) return true;
-		}
-		return false;
-	}
+	
 
 	public int length() {
 		// TODO Auto-generated method stub
@@ -85,6 +80,20 @@ public class TodoList {
 		// TODO Auto-generated method stub
 		return list.get(i);
 	}*/
+	public Boolean isDuplicate(String title) {
+		for (TodoItem item : list) {
+			if (title.equals(item.getTitle())) return true;
+		}
+		return false;
+	}
+	public void listAll() {
+		int c = 1;
+		System.out.println("All the items on the list~~~\n");
+		for (TodoItem myitem : list) {
+			System.out.println(c++ + ". [" + myitem.getcate() + "] "+ myitem.getTitle() + " - " + myitem.getDesc() + " - " + myitem.getdue() + "  -  " + myitem.getCurrent_date());
+		}
+	}
+	
 	
 	public void importData(String filename) {
 		try {
@@ -242,6 +251,40 @@ public class TodoList {
 		try {
 			stmt = conn.createStatement();
 			String sql = "SELECT DISTINCT category FROM list";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+
+	}
+	
+	public ArrayList<String> getListCategories(String keyword) {
+		ArrayList<String> list = new ArrayList<String>();
+		PreparedStatement pstmt;
+		try {
+			String sql = "SELECT * FROM list WHERE category = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, keyword);
+			ResultSet rs = pstmt.executeQuery();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+
+	}
+	
+	public ArrayList<TodoItem> getOrderedList(String orderby, int ordering) {
+		ArrayList<TodoItem> list = new ArrayList<TodoItem>();
+		Statement stmt;
+		try {
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM list ORDER BY " + orderby;
+			if(ordering == 0) {
+				sql += " desc";
+			}
 			ResultSet rs = stmt.executeQuery(sql);
 			
 		} catch (SQLException e) {
