@@ -78,7 +78,7 @@ public class TodoMain {
 				System.out.println("Choose the id to change completed > ");
 				int id = sc.nextInt();
 				TodoUtil.completeItem(l, id);
-				
+				sc.nextLine();
 				break;
 			case "ls_comp":
 				TodoUtil.completelist(l);
