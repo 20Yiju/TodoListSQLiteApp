@@ -22,70 +22,6 @@ public class TodoList {
 		this.conn = DbConnect.getConnection();
 	}
 
-	/*public void addItem(TodoItem t) {
-		list.add(t);
-	}
-
-	public void deleteItem(TodoItem t) {
-		list.remove(t);
-	}
-
-	void editItem(TodoItem t, TodoItem updated) {
-		int index = list.indexOf(t);
-		list.remove(index);
-		list.add(updated);
-	}
-
-	public ArrayList<TodoItem> getList() {
-		return new ArrayList<TodoItem>(list);
-	}
-
-	public void sortByName() {
-		Collections.sort(list, new TodoSortByName());
-
-	}
-
-	public void listAll() {
-		int c = 1;
-		System.out.println("All the items on the list~~~\n");
-		for (TodoItem myitem : list) {
-			System.out.println(c++ + ". [" + myitem.getcate() + "] "+ myitem.getTitle() + " - " + myitem.getDesc() + " - " + myitem.getdue() + "  -  " + myitem.getCurrent_date());
-
-			//System.out.println(myitem.getTitle() + myitem.getDesc());
-		}
-	}
-	
-	public void reverseList() {
-		Collections.reverse(list);
-	}
-
-	public void sortByDate() {
-		Collections.sort(list, new TodoSortByDate());
-	}
-
-	public int indexOf(TodoItem t) {
-		return list.indexOf(t);
-	}
-
-	
-
-	public int length() {
-		// TODO Auto-generated method stub
-		return list.size();
-	}
-
-
-
-	public Object getItem(int i) {
-		// TODO Auto-generated method stub
-		return list.get(i);
-	}*/
-	public Boolean isDuplicate(String title) {
-		for (TodoItem item : list) {
-			if (title.equals(item.getTitle())) return true;
-		}
-		return false;
-	}
 	public void listAll() {
 		int c = 1;
 		System.out.println("All the items on the list~~~\n");
@@ -99,7 +35,7 @@ public class TodoList {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
 			String line;
-			String sql = "invert into list (title, memo, category, current_date, due_date)"
+			String sql = "insert into list (title, memo, category, current_date, due_date)"
 					+ " values (?,?,?,?,?);";
 			
 			int record = 0;
@@ -144,6 +80,7 @@ public class TodoList {
 			pstmt.setString(4, t.getCurrent_date());
 			pstmt.setString(5, t.getdue());
 			count = pstmt.executeUpdate();
+			pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -233,11 +170,14 @@ public class TodoList {
 		PreparedStatement pstmt;
 		keyword = "%" + keyword + "%";
 		try {
-			String sql = "SELECT * FROM list WHERE title like ? or memo like ?";
+			String sql = "SELECT * FROM list WHERE title like ? or memo like ? or category like ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, keyword);
 			pstmt.setString(2, keyword);
-			ResultSet rs = pstmt.executeQuery(sql);
+			pstmt.setString(3, keyword);
+			ResultSet rs = pstmt.executeQuery();
+			changetolist_Itemtype(list, rs);			
+			pstmt.close();
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -252,7 +192,9 @@ public class TodoList {
 			stmt = conn.createStatement();
 			String sql = "SELECT DISTINCT category FROM list";
 			ResultSet rs = stmt.executeQuery(sql);
-			
+			String cate = rs.getString("category");
+			list.add(cate);
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -260,15 +202,18 @@ public class TodoList {
 
 	}
 	
-	public ArrayList<String> getListCategories(String keyword) {
-		ArrayList<String> list = new ArrayList<String>();
+	public ArrayList<TodoItem> getListCategories(String keyword) {
+		ArrayList<TodoItem> list = new ArrayList<TodoItem>();
 		PreparedStatement pstmt;
 		try {
 			String sql = "SELECT * FROM list WHERE category = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, keyword);
 			ResultSet rs = pstmt.executeQuery();
-			
+			changetolist_Itemtype(list, rs);
+			//String cate = rs.getString("category");
+			//list.add(cate);
+			pstmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -286,12 +231,49 @@ public class TodoList {
 				sql += " desc";
 			}
 			ResultSet rs = stmt.executeQuery(sql);
-			
+			changetolist_Itemtype(list, rs);			
+			stmt.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return list;
 
+	}
+	
+	@SuppressWarnings("unused")
+	private static void changetolist_Itemtype(ArrayList<TodoItem> list, ResultSet rs) throws SQLException {
+		while(rs.next()) {
+			TodoItem item = new TodoItem(
+					rs.getString("title"),
+					rs.getString("category"), 
+					rs.getString("memo"), 
+					rs.getString("current_date"),
+					rs.getString("due_date")
+			);
+			int ind = rs.getInt("id");
+			item.setId(ind);
+			list.add(item);
+			
+		}
+	}
+	
+	public Boolean isDuplicate(String title) {
+		String sql = "select count(id) from list where title = '" + title +"'";
+		Statement stmt;
+		int count = 0;
+		try {
+			stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			rs.next();
+			count = rs.getInt("count(id)");
+			stmt.close();
+			if(count > 0) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }
 

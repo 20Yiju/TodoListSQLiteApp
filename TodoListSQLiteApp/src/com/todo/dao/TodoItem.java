@@ -10,8 +10,20 @@ public class TodoItem {
     private String cate;
     private String due;
     private int id;
+    
 
     public TodoItem(String title, String desc, String cate, String due){
+        this.title=title;
+        this.desc=desc;   
+        String pattern = "yyyy/MM/dd HH:mm:ss";
+        SimpleDateFormat sim = new SimpleDateFormat(pattern);
+        this.current_date=sim.format(new Date());;
+        this.cate = cate;
+        this.due = due;
+ 
+    }
+    
+    public TodoItem(String title, String cate, String desc, String curr, String due){
         this.title=title;
         this.desc=desc;   
         String pattern = "yyyy/MM/dd HH:mm:ss";

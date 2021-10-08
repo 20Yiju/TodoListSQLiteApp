@@ -40,11 +40,13 @@ public class TodoMain {
 				break;
 			
 			case "find":
+				System.out.println("Write the word to search > ");
 				String keyword = sc.nextLine().trim();
 				TodoUtil.findList(l, keyword);
 				break;
 			
 			case "find_cate":
+				System.out.println("Write the word to search > ");
 				String cate = sc.nextLine().trim();
 				TodoUtil.findCateList(l, cate);
 				break;

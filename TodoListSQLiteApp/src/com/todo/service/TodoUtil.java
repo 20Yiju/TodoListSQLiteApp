@@ -49,6 +49,9 @@ public class TodoUtil {
 		sc.nextLine();
 		System.out.println("Are you sure to erase the above items? (y/n)");
 		String yn = sc.next().trim();
+		//if(l.deleteItem(ind) > 0) {
+		//	System.out.println("DELETE successfully:D");
+		//}
 		if(yn.equals("y")) {
 			if(l.deleteItem(ind) > 0) {
 				System.out.println("DELETE successfully:D");
@@ -65,10 +68,7 @@ public class TodoUtil {
 		System.out.println("EDIT item You Want!!\n"
 				+ "Write the number of the item you want to EDIT > " );
 		int ind = sc.nextInt();
-		if (ind > l.getCount()) {
-			System.out.println("Number doesn't exist...");
-			return;
-		}
+		
 		sc.nextLine();
 		System.out.println("Write the NEW title of the item > ");
 		new_title = sc.next().trim();
@@ -95,11 +95,11 @@ public class TodoUtil {
 	}
 
 	public static void listAll(TodoList l) {
-		//int c = 1;
+		int c = 1;
 		System.out.println("Full list of the list:D , " + l.getCount() + " items are readed!!");
 		for (TodoItem item : l.getList()) {
 			//System.out.println(c++ + ". "+ item.toString());
-			System.out.println(item.toString());
+			System.out.println(item.getId() + item.toString());
 		}
 	}
 	public static void saveList(TodoList l, String filename) {
@@ -107,7 +107,7 @@ public class TodoUtil {
 		try {
 			FileWriter fw = new FileWriter(path);
 			for (TodoItem item : l.getList()) {
-				fw.write(item.toSaveString());
+				fw.write(item.getId() + item.toSaveString());
 			}
 			System.out.println("All data has been successfully saved!:D");
 			fw.close();
@@ -156,7 +156,7 @@ public class TodoUtil {
 		int c = 0;
 		
 		for (TodoItem item : l.getList(keyword)) {
-			System.out.println(item.toString());
+			System.out.println(item.getId() + item.toString());
 			c++;
 		}
 		System.out.printf("%d items are founded:D\n", c);
@@ -201,17 +201,17 @@ public class TodoUtil {
 	
 	public static void findCateList(TodoList l, String cate) {
 		int c = 0;
-		for (String item : l.getListCategories(cate)) {
-			System.out.println(item.toString());
+		for (TodoItem item : l.getListCategories(cate)) {
+			System.out.println(item.getId() + item.toString());
 			c++;
 		}
 		System.out.printf("\n%d items are founded:D\n", c);	
 	}
 	
 	public static void listAll(TodoList l, String orderby, int ordering) {
-		System.out.printf("\n%d items are exist:D", l.getCount());
+		System.out.printf("\n%d items are exist:D\n", l.getCount());
 		for (TodoItem item : l.getOrderedList(orderby, ordering)) {
-			System.out.println(item.toString());
+			System.out.println(item.getId() + item.toString());
 		}
 	}
 	
