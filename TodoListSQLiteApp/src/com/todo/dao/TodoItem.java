@@ -9,6 +9,7 @@ public class TodoItem {
     private String current_date;
     private String cate;
     private String due;
+    private int id;
 
     public TodoItem(String title, String desc, String cate, String due){
         this.title=title;
@@ -67,6 +68,14 @@ public class TodoItem {
     public String toSaveString() {
     	return cate + "##" + title + "##" + desc + "##" + due + "##" + current_date + "\n";
     }
+
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getId() {
+		return id;
+	}
+	
 
 	
 }

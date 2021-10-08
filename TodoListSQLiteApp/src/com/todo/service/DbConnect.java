@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DBConnection {
+public class DbConnect {
 	private static Connection conn = null;
 	
 	public static void closeConnection() {

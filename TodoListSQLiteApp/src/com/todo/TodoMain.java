@@ -12,6 +12,7 @@ public class TodoMain {
 	
 		Scanner sc = new Scanner(System.in);
 		TodoList l = new TodoList();
+		l.importData("todolist.txt");
 		boolean isList = false;
 		boolean quit = false;
 		TodoUtil.loadList(l, "todolist.txt");
@@ -39,11 +40,12 @@ public class TodoMain {
 				break;
 			
 			case "find":
-				TodoUtil.find(l);
+				String keyword = sc.nextLine().trim();
+				TodoUtil.findList(l, keyword);
 				break;
 			
 			case "find_cate":
-				TodoUtil.findCate(l);
+				TodoUtil.listCateAll(l);
 				break;
 				
 			case "ls_cate":
