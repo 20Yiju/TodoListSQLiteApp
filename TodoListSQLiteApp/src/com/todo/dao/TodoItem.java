@@ -10,6 +10,7 @@ public class TodoItem {
     private String cate;
     private String due;
     private int id;
+    private int is_completed;
     
 
     public TodoItem(String title, String desc, String cate, String due){
@@ -72,11 +73,23 @@ public class TodoItem {
         this.due = due;
     }
     
+   
+    public void setiscom(int n) {
+		this.is_completed = n;
+	}
+	public int getiscom() {
+		
+		return is_completed;
+	}
     
-    
-    public String toString() {
-    	return "[" + cate + "] " + title + "  -  " + desc + "  -  " + due + "  -  " + current_date;
+
+    public String toString(){
+    	if(is_completed == 0) {
+    		return "[" + cate + "]" + title + "  -  " + desc + "  -  " + due + "  -  " + current_date;
+    	}
+    	return "[V][" + cate + "]" + title + "  -  " + desc + "  -  " + due + "  -  " + current_date;
     }
+
     public String toSaveString() {
     	return cate + "##" + title + "##" + desc + "##" + due + "##" + current_date + "\n";
     }

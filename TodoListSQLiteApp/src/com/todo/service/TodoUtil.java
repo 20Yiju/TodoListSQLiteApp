@@ -95,13 +95,15 @@ public class TodoUtil {
 	}
 
 	public static void listAll(TodoList l) {
-		int c = 1;
+
 		System.out.println("Full list of the list:D , " + l.getCount() + " items are readed!!");
 		for (TodoItem item : l.getList()) {
-			//System.out.println(c++ + ". "+ item.toString());
 			System.out.println(item.getId() + item.toString());
 		}
 	}
+	
+	
+	
 	public static void saveList(TodoList l, String filename) {
 		String path = "/Users/jeong-yiju/git/TodoListApp/" + filename;
 		try {
@@ -214,6 +216,25 @@ public class TodoUtil {
 			System.out.println(item.getId() + item.toString());
 		}
 	}
+	
+	public static void completeItem(TodoList l, int id) {
+		if(l.completeItem(id)) {
+			System.out.println("Change to \"complete\" successfully:D\n");
+		}
+		else {
+			System.out.println("ID doesn't exist...");
+		}
+	}
+	public static void completelist(TodoList l) {
+		int c = 0;
+		for (TodoItem item : l.completelist()) {
+			System.out.println(item.getId() + item.toString());
+			c++;
+		}
+		System.out.printf("\n%d items are founded:D\n", c);	
+	}
+	
+	
 	
 
 }

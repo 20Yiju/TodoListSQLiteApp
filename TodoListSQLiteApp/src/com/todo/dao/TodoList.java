@@ -16,19 +16,19 @@ import com.todo.service.TodoSortByName;
 public class TodoList {
 	private Connection conn;
 	
-	private List<TodoItem> list;
+	//private List<TodoItem> list;
 
 	public TodoList() {
 		this.conn = DbConnect.getConnection();
 	}
 
-	public void listAll() {
+	/*public void listAll() {
 		int c = 1;
 		System.out.println("All the items on the list~~~\n");
 		for (TodoItem myitem : list) {
 			System.out.println(c++ + ". [" + myitem.getcate() + "] "+ myitem.getTitle() + " - " + myitem.getDesc() + " - " + myitem.getdue() + "  -  " + myitem.getCurrent_date());
 		}
-	}
+	}*/
 	
 	
 	public void importData(String filename) {
@@ -47,12 +47,14 @@ public class TodoList {
 				String due_date = st.nextToken();
 				String current_date = st.nextToken();
 				
+				
 				PreparedStatement pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, title);
 				pstmt.setString(2, description);
 				pstmt.setString(3, category);
 				pstmt.setString(4, current_date);
 				pstmt.setString(5, due_date);
+				//pstmt.setInt(6, iscom);
 				int count = pstmt.executeUpdate();
 				if(count > 0) {
 					record++;
@@ -68,8 +70,8 @@ public class TodoList {
 	}
 	
 	public int addItem(TodoItem t) {
-		String sql = "insert into list (title, memo, category, current_date, due_date)"
-				+ " values (?,?,?,?,?);";
+		String sql = "insert into list (title, memo, category, current_date, due_date, is_completed)"
+				+ " values (?,?,?,?,?,?);";
 		PreparedStatement pstmt;
 		int count = 0;
 		try {
@@ -79,6 +81,7 @@ public class TodoList {
 			pstmt.setString(3, t.getcate());
 			pstmt.setString(4, t.getCurrent_date());
 			pstmt.setString(5, t.getdue());
+			pstmt.setInt(6, t.getiscom());
 			count = pstmt.executeUpdate();
 			pstmt.close();
 		} catch (SQLException e) {
@@ -103,6 +106,12 @@ public class TodoList {
 				String current_date = rs.getString("current_date");
 				TodoItem t = new TodoItem(title, description, category, due_date);
 				t.setId(id);
+				if(rs.getInt("is_completed") == 1) {
+					t.setiscom(1);
+				}
+				else {
+					t.setiscom(0);
+				}
 				t.setCurrent_date(current_date);
 				list.add(t);
 			}
@@ -252,6 +261,13 @@ public class TodoList {
 			);
 			int ind = rs.getInt("id");
 			item.setId(ind);
+			if(rs.getInt("is_completed") == 1) {
+				item.setiscom(1);
+			}
+			else {
+				item.setiscom(0);
+			}
+			
 			list.add(item);
 			
 		}
@@ -275,6 +291,41 @@ public class TodoList {
 		}
 		return false;
 	}
+	
+	public boolean completeItem(int id) {
+		String sql = "update list set is_completed = 1 where id = " + id;
+		Statement stmt;
+		int count = 0;
+		try {
+			stmt = conn.createStatement();
+			count = stmt.executeUpdate(sql);
+			stmt.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if(count > 0) {
+			return true;
+		}
+		return false;
+		
+	}
+	public ArrayList<TodoItem> completelist() {
+		ArrayList<TodoItem> list = new ArrayList<TodoItem>();
+		Statement stmt;
+		try {
+			stmt = conn.createStatement();
+			String sql = "SELECT * FROM list WHERE is_completed = 1";
+			ResultSet rs = stmt.executeQuery(sql);
+			changetolist_Itemtype(list, rs);			
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+		
+	}
+	
 }
 
 

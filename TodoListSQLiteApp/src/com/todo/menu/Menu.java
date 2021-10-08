@@ -10,13 +10,15 @@ public class Menu {
         System.out.println("3. Update an item  ( edit )");
         System.out.println("4. Show all List items ( ls )");
         System.out.println("4. Show all Category ( ls_cate )");
-        System.out.println("6. find the item ( find )");
-        System.out.println("7. find the item by category ( find_cate )");
-        System.out.println("8. sort the list by name ( ls_name_asc )");
-        System.out.println("9. sort the list by name ( ls_name_desc )");
-        System.out.println("10. sort the list by date ( ls_date )");
-        System.out.println("11. sort the list by date ( ls_date_desc )");
-        System.out.println("12. exit (Or press escape key to exit)");
+        System.out.println("6. Find the item ( find )");
+        System.out.println("7. Find the item by category ( find_cate )");
+        System.out.println("8. Sort the list by name ( ls_name_asc )");
+        System.out.println("9. Sort the list by name ( ls_name_desc )");
+        System.out.println("10. Sort the list by date ( ls_date )");
+        System.out.println("11. Sort the list by date ( ls_date_desc )");
+        System.out.println("12. Change to complete ( comp )");
+        System.out.println("13. Show all completed list ( ls_comp )");
+        System.out.println("14. Exit (Or press escape key to exit)");
         //System.out.println("Enter your choice >");
     }
     

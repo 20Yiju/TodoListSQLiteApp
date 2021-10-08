@@ -74,6 +74,16 @@ public class TodoMain {
 				System.out.println("This list is arranged in reverse order of date.");
 				TodoUtil.listAll(l, "title", 0);
 				break;
+			case "comp":
+				System.out.println("Choose the id to change completed > ");
+				int id = sc.nextInt();
+				TodoUtil.completeItem(l, id);
+				
+				break;
+			case "ls_comp":
+				TodoUtil.completelist(l);
+				
+				break;
 	
 			case "help" :
 				Menu.displaymenu();
@@ -89,7 +99,7 @@ public class TodoMain {
 				break;
 			}
 			
-			if(isList) l.listAll();
+			if(isList) TodoUtil.listAll(l);
 		} while (!quit);
 		TodoUtil.saveList(l, "todolist.txt");
 	}
