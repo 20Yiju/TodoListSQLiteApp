@@ -18,6 +18,7 @@ public class TodoUtil {
 		
 		if(list.isDuplicate(title)) {
 			System.out.println("Title can not be duplicate!!");
+			return;
 		}
 		
 		sc.nextLine();
