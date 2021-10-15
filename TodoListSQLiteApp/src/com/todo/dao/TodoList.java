@@ -21,22 +21,14 @@ public class TodoList {
 	public TodoList() {
 		this.conn = DbConnect.getConnection();
 	}
-
-	/*public void listAll() {
-		int c = 1;
-		System.out.println("All the items on the list~~~\n");
-		for (TodoItem myitem : list) {
-			System.out.println(c++ + ". [" + myitem.getcate() + "] "+ myitem.getTitle() + " - " + myitem.getDesc() + " - " + myitem.getdue() + "  -  " + myitem.getCurrent_date());
-		}
-	}*/
 	
 	
 	public void importData(String filename) {
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(filename));
 			String line;
-			String sql = "insert into list (title, memo, category, current_date, due_date)"
-					+ " values (?,?,?,?,?);";
+			String sql = "insert into list (title, memo, category, current_date, due_date, is_completed)"
+					+ " values (?,?,?,?,?,?);";
 			
 			int record = 0;
 			while((line = br.readLine()) != null) {
@@ -46,6 +38,8 @@ public class TodoList {
 				String description = st.nextToken();
 				String due_date = st.nextToken();
 				String current_date = st.nextToken();
+				String is_comp = st.nextToken();
+				int is_completed = Integer.parseInt(is_comp);
 				
 				
 				PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -54,8 +48,9 @@ public class TodoList {
 				pstmt.setString(3, category);
 				pstmt.setString(4, current_date);
 				pstmt.setString(5, due_date);
-				//pstmt.setInt(6, iscom);
+				pstmt.setInt(6, is_completed);
 				int count = pstmt.executeUpdate();
+				
 				if(count > 0) {
 					record++;
 				}
